@@ -1,0 +1,113 @@
+{
+  "language": "powershell",
+  "rules": [
+    {
+      "id": "SB-PS-001",
+      "title": "Script downloads content and executes it",
+      "severity": "high",
+      "points": 25,
+      "description": "Script có lệnh tải dữ liệu từ Internet và lệnh thực thi.",
+      "match": "all",
+      "patterns": [
+        "(?i)(downloadstring|downloadfile|downloaddata|invoke-webrequest|\\biwr\\b|invoke-restmethod|\\birm\\b|net\\.webclient|start-bitstransfer|bitsadmin)",
+        "(?i)(invoke-expression|\\biex\\b|start-process|\\[?scriptblock\\]?::create|\\.invoke\\(\\))"
+      ]
+    },
+    {
+      "id": "SB-PS-002",
+      "title": "Script modifies Windows Defender settings",
+      "severity": "high",
+      "points": 25,
+      "description": "Script có thao tác tắt hoặc thêm ngoại lệ cho Windows Defender.",
+      "match": "any",
+      "patterns": [
+        "(?i)set-mppreference[^\\n]*disable",
+        "(?i)add-mppreference[^\\n]*exclusion",
+        "(?i)disableantispyware",
+        "(?i)sc(\\.exe)?\\s+(stop|config)\\s+windefend"
+      ]
+    },
+    {
+      "id": "SB-PS-003",
+      "title": "Script content appears obfuscated or encoded",
+      "severity": "medium",
+      "points": 15,
+      "description": "Có dấu hiệu mã hóa Base64, XOR hoặc làm rối nội dung.",
+      "match": "any",
+      "patterns": [
+        "(?i)-enc(odedcommand)?\\s+[A-Za-z0-9+/=]{40,}",
+        "(?i)frombase64string",
+        "(?i)-bxor\\b",
+        "[A-Za-z0-9+/=]{300,}"
+      ]
+    },
+    {
+      "id": "SB-PS-004",
+      "title": "Script sets up persistence",
+      "severity": "medium",
+      "points": 20,
+      "description": "Script tạo tác vụ định kỳ hoặc mục khởi động cùng Windows.",
+      "match": "any",
+      "patterns": [
+        "(?i)schtasks(\\.exe)?\\s*/create",
+        "(?i)(new|register)-scheduledtask",
+        "(?i)currentversion\\\\run",
+        "(?i)start menu\\\\programs\\\\startup"
+      ]
+    },
+    {
+      "id": "SB-PS-005",
+      "title": "Script hides its window or bypasses execution policy",
+      "severity": "medium",
+      "points": 15,
+      "description": "Cờ chạy ẩn hoặc bỏ qua ExecutionPolicy. Cũng gặp ở script quản trị hợp lệ.",
+      "match": "any",
+      "patterns": [
+        "(?i)-(windowstyle|w)\\s+hidden",
+        "(?i)-(executionpolicy|ep)\\s+bypass"
+      ]
+    },
+    {
+      "id": "SB-PS-006",
+      "title": "Script tampers with AMSI or script block logging",
+      "severity": "high",
+      "points": 25,
+      "description": "Có dấu hiệu vô hiệu hóa AMSI hoặc ghi log script để tránh bị phát hiện.",
+      "match": "any",
+      "patterns": [
+        "(?i)amsiutils",
+        "(?i)amsiinitfailed",
+        "(?i)amsicontext",
+        "(?i)scriptblocklogging"
+      ]
+    },
+    {
+      "id": "SB-PS-007",
+      "title": "Script references credential dumping",
+      "severity": "high",
+      "points": 30,
+      "description": "Có tham chiếu tới công cụ hoặc kỹ thuật lấy thông tin đăng nhập từ bộ nhớ.",
+      "match": "any",
+      "patterns": [
+        "(?i)mimikatz",
+        "(?i)sekurlsa",
+        "(?i)comsvcs\\.dll[^\\n]*minidump",
+        "(?i)procdump[^\\n]*lsass"
+      ]
+    },
+    {
+      "id": "SB-PS-008",
+      "title": "Script loads code in memory via reflection or native APIs",
+      "severity": "medium",
+      "points": 20,
+      "description": "Nạp assembly hoặc gọi API gốc để chạy mã trong bộ nhớ.",
+      "match": "any",
+      "patterns": [
+        "(?i)\\[reflection\\.assembly\\]::load",
+        "(?i)add-type[^\\n]*dllimport",
+        "(?i)\\bvirtualalloc\\b",
+        "(?i)\\bwriteprocessmemory\\b"
+      ]
+    }
+  ]
+}

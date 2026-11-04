@@ -1,0 +1,80 @@
+{
+  "version": 2,
+  "levels": [
+    {
+      "min": 0,
+      "id": "none",
+      "label": "No threats detected"
+    },
+    {
+      "min": 15,
+      "id": "low",
+      "label": "Low risk"
+    },
+    {
+      "min": 40,
+      "id": "medium",
+      "label": "Medium risk"
+    },
+    {
+      "min": 70,
+      "id": "high",
+      "label": "High risk"
+    },
+    {
+      "min": 90,
+      "id": "critical",
+      "label": "Critical risk"
+    }
+  ],
+  "signal_rules": [
+    {
+      "id": "SB-FILE-001",
+      "signal": "executable_disguised",
+      "title": "Executable disguised with a non-executable extension",
+      "severity": "high",
+      "points": 30,
+      "description": "Nội dung file là mã thực thi nhưng phần mở rộng không phản ánh điều đó."
+    },
+    {
+      "id": "SB-FILE-002",
+      "signal": "extension_mismatch",
+      "title": "File extension does not match actual content",
+      "severity": "medium",
+      "points": 20,
+      "description": "Định dạng thực tế khác với phần mở rộng, có thể nhằm đánh lừa người dùng."
+    },
+    {
+      "id": "SB-FILE-003",
+      "signal": "double_extension",
+      "title": "Double extension ending in an executable type",
+      "severity": "medium",
+      "points": 20,
+      "description": "Tên dạng 'invoice.pdf.exe' thường dùng để giả làm tài liệu."
+    },
+    {
+      "id": "SB-FILE-004",
+      "signal": "rtl_override",
+      "title": "Filename contains Unicode direction-override characters",
+      "severity": "high",
+      "points": 30,
+      "description": "Ký tự điều hướng Unicode có thể đảo ngược cách hiển thị đuôi file."
+    },
+    {
+      "id": "SB-DOC-001",
+      "signal": "has_macros",
+      "title": "Office document contains a VBA macro project",
+      "severity": "medium",
+      "points": 15,
+      "description": "Macro là vector phổ biến, nhưng cũng được dùng hợp lệ. Cần xem xét ngữ cảnh."
+    },
+    {
+      "id": "SB-ARC-001",
+      "signal": "archive_contains_executable",
+      "title": "Archive contains executable or script files",
+      "severity": "low",
+      "points": 15,
+      "description": "Kho nén chứa file thực thi hoặc script. Chưa chắc độc hại."
+    }
+  ]
+}

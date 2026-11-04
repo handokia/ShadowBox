@@ -1,0 +1,128 @@
+{
+  "language": "python",
+  "rules": [
+    {
+      "id": "SB-PY-001",
+      "title": "Python executes decoded or decompressed code",
+      "severity": "medium",
+      "points": 15,
+      "description": "exec/eval chạy dữ liệu vừa giải mã hoặc giải nén.",
+      "match": "any",
+      "patterns": [
+        "(?i)\\b(exec|eval)\\s*\\(.*(b64decode|decompress|fromhex|marshal\\.loads)",
+        "(?i)\\bexec\\s*\\(\\s*(zlib|base64|marshal)\\b"
+      ]
+    },
+    {
+      "id": "SB-PY-002",
+      "title": "Python downloads content and runs commands or code",
+      "severity": "medium",
+      "points": 20,
+      "description": "Có lệnh tải dữ liệu từ mạng và lệnh thực thi. Có thể là script cài đặt hợp lệ.",
+      "match": "all",
+      "patterns": [
+        "(?i)(urllib\\.request\\.urlopen|urlretrieve|requests\\.(get|post)\\s*\\(|http\\.client|\\burlopen\\()",
+        "(?i)(subprocess\\.|os\\.system\\(|os\\.popen\\(|\\bexec\\(|\\beval\\(|ctypes\\.windll)"
+      ]
+    },
+    {
+      "id": "SB-PY-003",
+      "title": "Python runs shell commands",
+      "severity": "low",
+      "points": 10,
+      "description": "Gọi shell trực tiếp. Phổ biến ở script hợp lệ, chỉ mang tính tham khảo.",
+      "match": "any",
+      "patterns": [
+        "(?i)subprocess\\.\\w+\\([^\\n]*shell\\s*=\\s*true",
+        "(?i)\\bos\\.system\\("
+      ]
+    },
+    {
+      "id": "SB-PY-004",
+      "title": "Python sets up persistence",
+      "severity": "medium",
+      "points": 20,
+      "description": "Ghi khóa Run trong registry hoặc tạo tác vụ định kỳ.",
+      "match": "any",
+      "patterns": [
+        "(?i)winreg\\.[^\\n]*run",
+        "(?i)currentversion\\\\{1,2}run",
+        "(?i)\\bschtasks\\b"
+      ]
+    },
+    {
+      "id": "SB-PY-005",
+      "title": "Python accesses browser or token stores",
+      "severity": "high",
+      "points": 30,
+      "description": "Truy cập dữ liệu trình duyệt, token hoặc giải mã DPAPI. Thường gặp ở infostealer.",
+      "match": "any",
+      "patterns": [
+        "(?i)login data",
+        "(?i)cookies\\.sqlite",
+        "(?i)logins\\.json",
+        "(?i)key4\\.db",
+        "(?i)cryptunprotectdata",
+        "(?i)discord[^\\n]*token"
+      ]
+    },
+    {
+      "id": "SB-PY-006",
+      "title": "Python captures keystrokes or the screen",
+      "severity": "medium",
+      "points": 20,
+      "description": "Có thư viện hoặc API ghi phím, chụp màn hình.",
+      "match": "any",
+      "patterns": [
+        "(?i)\\bpynput\\b",
+        "(?i)keyboard\\.on_press",
+        "(?i)getasynckeystate",
+        "(?i)setwindowshookex",
+        "(?i)imagegrab\\.grab",
+        "(?i)pyautogui\\.screenshot"
+      ]
+    },
+    {
+      "id": "SB-PY-007",
+      "title": "Python calls process injection APIs",
+      "severity": "high",
+      "points": 30,
+      "description": "Dùng API cấp phát bộ nhớ và chạy mã trong tiến trình khác.",
+      "match": "any",
+      "patterns": [
+        "(?i)\\bvirtualallocex\\b",
+        "(?i)\\bwriteprocessmemory\\b",
+        "(?i)\\bcreateremotethread\\b",
+        "(?i)\\bntcreatethreadex\\b",
+        "(?i)\\bvirtualalloc\\b"
+      ]
+    },
+    {
+      "id": "SB-PY-008",
+      "title": "Python walks files, encrypts and deletes them",
+      "severity": "high",
+      "points": 25,
+      "description": "Duyệt thư mục, mã hóa và xóa file. Giống hành vi ransomware, cần xem xét thủ công.",
+      "match": "all",
+      "patterns": [
+        "(?i)(fernet|aes\\.new|\\.encrypt\\()",
+        "(?i)(os\\.walk\\(|glob\\.glob\\(|rglob\\()",
+        "(?i)(os\\.(remove|unlink)\\(|shutil\\.rmtree|\\.unlink\\()"
+      ]
+    },
+    {
+      "id": "SB-PY-009",
+      "title": "Python content appears obfuscated",
+      "severity": "medium",
+      "points": 15,
+      "description": "Chuỗi hex escape dài, __import__ động hoặc Base64 lớn.",
+      "match": "any",
+      "patterns": [
+        "(?i)(\\\\x[0-9a-f]{2}){20,}",
+        "(?i)__import__\\(\\s*['\\\"]",
+        "(?i)getattr\\(\\s*__builtins__",
+        "(?i)b64decode\\(\\s*['\\\"][A-Za-z0-9+/=]{100,}"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "language": "batch",
+  "rules": [
+    {
+      "id": "SB-BAT-001",
+      "title": "Batch file downloads content from the Internet",
+      "severity": "high",
+      "points": 25,
+      "description": "Dùng certutil, bitsadmin, curl hoặc PowerShell để tải file.",
+      "match": "any",
+      "patterns": [
+        "(?i)certutil(\\.exe)?[^\\n]*-urlcache",
+        "(?i)bitsadmin[^\\n]*/transfer",
+        "(?i)\\bcurl(\\.exe)?\\b[^\\n]*https?://",
+        "(?i)powershell[^\\n]*(downloadstring|downloadfile|invoke-webrequest|\\biwr\\b)"
+      ]
+    },
+    {
+      "id": "SB-BAT-002",
+      "title": "Batch file disables security features",
+      "severity": "high",
+      "points": 25,
+      "description": "Dừng dịch vụ bảo mật, tắt tường lửa hoặc tắt Defender.",
+      "match": "any",
+      "patterns": [
+        "(?i)\\bsc(\\.exe)?\\s+(stop|config)\\s+(windefend|wscsvc|sense)\\b",
+        "(?i)netsh\\s+advfirewall\\s+set\\s+\\w+\\s+state\\s+off",
+        "(?i)reg\\s+add[^\\n]*(disableantispyware|disablerealtimemonitoring)",
+        "(?i)(set|add)-mppreference",
+        "(?i)taskkill[^\\n]*(msmpeng|mssense)"
+      ]
+    },
+    {
+      "id": "SB-BAT-003",
+      "title": "Batch file sets up persistence",
+      "severity": "medium",
+      "points": 20,
+      "description": "Tạo tác vụ định kỳ, khóa Run, dịch vụ hoặc mục Startup.",
+      "match": "any",
+      "patterns": [
+        "(?i)schtasks(\\.exe)?\\s*/create",
+        "(?i)reg\\s+add[^\\n]*currentversion\\\\run",
+        "(?i)\\\\start menu\\\\programs\\\\startup",
+        "(?i)\\bsc(\\.exe)?\\s+create\\b"
+      ]
+    },
+    {
+      "id": "SB-BAT-004",
+      "title": "Batch file inhibits system recovery",
+      "severity": "high",
+      "points": 35,
+      "description": "Xóa shadow copy, backup hoặc tắt khôi phục. Đây là hành vi thường thấy ở ransomware.",
+      "match": "any",
+      "patterns": [
+        "(?i)vssadmin(\\.exe)?\\s+delete\\s+shadows",
+        "(?i)wmic\\s+shadowcopy\\s+delete",
+        "(?i)bcdedit[^\\n]*(recoveryenabled\\s+no|bootstatuspolicy\\s+ignoreallfailures)",
+        "(?i)wbadmin\\s+delete\\s+(catalog|backup)"
+      ]
+    },
+    {
+      "id": "SB-BAT-005",
+      "title": "Batch file content appears obfuscated",
+      "severity": "medium",
+      "points": 15,
+      "description": "Ghép chuỗi bằng cắt biến môi trường hoặc chèn ký tự escape để làm rối lệnh.",
+      "match": "any",
+      "patterns": [
+        "(?i)(%[a-z0-9_]+:~-?\\d+(,-?\\d+)?%.*){4,}",
+        "(?i)(\\^[a-z]){4,}",
+        "(?i)cmd(\\.exe)?\\s*/v(:on)?[^\\n]*!"
+      ]
+    },
+    {
+      "id": "SB-BAT-006",
+      "title": "Batch file launches hidden or encoded PowerShell",
+      "severity": "medium",
+      "points": 20,
+      "description": "Gọi PowerShell ẩn, mã hóa hoặc bỏ qua ExecutionPolicy.",
+      "match": "any",
+      "patterns": [
+        "(?i)powershell[^\\n]*-w(indowstyle)?\\s+hidden",
+        "(?i)powershell[^\\n]*-enc(odedcommand)?\\s+[A-Za-z0-9+/=]{20,}",
+        "(?i)powershell[^\\n]*-(executionpolicy|ep)\\s+bypass"
+      ]
+    },
+    {
+      "id": "SB-BAT-007",
+      "title": "Batch file attempts UAC bypass",
+      "severity": "high",
+      "points": 25,
+      "description": "Ghi khóa registry hoặc dùng công cụ Windows để nâng quyền không qua UAC.",
+      "match": "any",
+      "patterns": [
+        "(?i)hkcu\\\\software\\\\classes\\\\ms-settings",
+        "(?i)\\bfodhelper(\\.exe)?\\b",
+        "(?i)reg\\s+add[^\\n]*\\benablelua\\b"
+      ]
+    }
+  ]
+}

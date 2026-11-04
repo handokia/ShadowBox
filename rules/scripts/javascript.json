@@ -1,0 +1,98 @@
+{
+  "language": "javascript",
+  "rules": [
+    {
+      "id": "SB-JS-001",
+      "title": "Script runs system commands through Windows Script Host",
+      "severity": "high",
+      "points": 25,
+      "description": "Dùng WScript.Shell, Shell.Application hoặc gọi cmd/powershell/mshta.",
+      "match": "any",
+      "patterns": [
+        "(?i)wscript\\.shell",
+        "(?i)shell\\.application",
+        "(?i)\\.(exec|run)\\s*\\([^\\n]*(cmd|powershell|mshta|wscript|cscript)"
+      ]
+    },
+    {
+      "id": "SB-JS-002",
+      "title": "Script downloads content and writes or runs it",
+      "severity": "high",
+      "points": 25,
+      "description": "Có đối tượng tải dữ liệu cùng với lệnh ghi file hoặc thực thi.",
+      "match": "all",
+      "patterns": [
+        "(?i)(msxml2\\.(server)?xmlhttp|winhttp\\.winhttprequest|microsoft\\.xmlhttp|adodb\\.stream|xmlhttprequest|\\bfetch\\s*\\(|https?\\.get\\s*\\()",
+        "(?i)(savetofile|\\.run\\s*\\(|\\.exec\\s*\\(|child_process|\\bspawn\\s*\\(|execsync|writefile)"
+      ]
+    },
+    {
+      "id": "SB-JS-003",
+      "title": "Script evaluates dynamic code",
+      "severity": "low",
+      "points": 10,
+      "description": "eval, new Function hoặc setTimeout với chuỗi. Phổ biến ở mã hợp lệ, chỉ mang tính tham khảo.",
+      "match": "any",
+      "patterns": [
+        "\\beval\\s*\\(",
+        "new\\s+Function\\s*\\(",
+        "(?i)\\bsettimeout\\(\\s*['\\\"]"
+      ]
+    },
+    {
+      "id": "SB-JS-004",
+      "title": "Script content appears obfuscated",
+      "severity": "medium",
+      "points": 15,
+      "description": "Chuỗi mã hóa ký tự, hex/unicode escape dài hoặc tên biến kiểu obfuscator.",
+      "match": "any",
+      "patterns": [
+        "(?i)String\\.fromCharCode\\((\\s*\\d+\\s*,){8,}",
+        "(?i)(\\\\x[0-9a-f]{2}){12,}",
+        "(?i)(\\\\u[0-9a-f]{4}){8,}",
+        "(?i)unescape\\(\\s*['\\\"]%",
+        "(?i)\\b_0x[a-f0-9]{4,6}\\b",
+        "[A-Za-z0-9+/=]{300,}"
+      ]
+    },
+    {
+      "id": "SB-JS-005",
+      "title": "Node script spawns shell or download commands",
+      "severity": "medium",
+      "points": 20,
+      "description": "child_process gọi shell, powershell, curl hoặc wget.",
+      "match": "any",
+      "patterns": [
+        "(?i)(exec|execsync|spawn|spawnsync)\\s*\\([^\\n]*(powershell|cmd(\\.exe)?\\s*/c|/bin/(ba)?sh|\\bcurl\\b|\\bwget\\b)"
+      ]
+    },
+    {
+      "id": "SB-JS-006",
+      "title": "Script exfiltrates cookies, keystrokes or token stores",
+      "severity": "high",
+      "points": 25,
+      "description": "Gửi cookie, localStorage hoặc phím gõ ra ngoài, hoặc đọc kho token trình duyệt.",
+      "match": "any",
+      "patterns": [
+        "(?i)(document\\.cookie|localstorage\\.getitem)[^\\n]*(fetch|xmlhttprequest|sendbeacon|http)",
+        "(?i)addeventlistener\\(\\s*['\\\"]key(down|press|up)['\\\"][^\\n]*(fetch|xhr|send)",
+        "(?i)\\bleveldb\\b",
+        "(?i)discord[^\\n]*token"
+      ]
+    },
+    {
+      "id": "SB-JS-007",
+      "title": "Script sets up persistence",
+      "severity": "medium",
+      "points": 20,
+      "description": "Ghi registry, tạo tác vụ hoặc dùng thư mục Startup qua WSH.",
+      "match": "any",
+      "patterns": [
+        "(?i)\\bregwrite\\b",
+        "(?i)\\bschtasks\\b",
+        "(?i)currentversion\\\\{1,2}run",
+        "(?i)specialfolders\\(\\s*['\\\"]startup['\\\"]"
+      ]
+    }
+  ]
+}
