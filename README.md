@@ -27,7 +27,7 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000
 # Docs: http://127.0.0.1:8000/docs   |   POST /api/v1/analyze (multipart, field "file")
 ```
 Biến môi trường: `SHADOWBOX_MAX_UPLOAD_MB` (mặc định 50), `SHADOWBOX_RULES`, `SHADOWBOX_TMP_DIR`.
-> mở 2 tab terminal để có thể vừa chạy app vừa chạy 
+> mở 2 tab terminal để có thể vừa chạy app vừa chạy api
 ## Cấu trúc
 ```
 backend/app/analyzers/   File Inspector (hash, magic bytes, đuôi giả, ZIP/OOXML)
